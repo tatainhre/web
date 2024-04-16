@@ -2,19 +2,13 @@
 include 'template/header.php';
 include 'template/sidebar.php';
 
-$servername = "localhost";
-$database = "db_mahasiswa";
-$username = "root";
-$password = "";
+require 'koneksi.php';
 
-$conn = mysqli_connect($servername, $username, $password, $database);
-
-$query = "SELECT * FROM mahasiswa";
+$query = "SELECT * FROM mahasiswa JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi";
 $hasil = mysqli_query($conn, $query);
 
 $data = [];
-while ($baris = mysqli_fetch_assoc($hasil))
-{
+while ($baris = mysqli_fetch_assoc($hasil)) {
   $data [] = $baris;
 }
 
@@ -51,14 +45,7 @@ while ($baris = mysqli_fetch_assoc($hasil))
                 <h3 class="card-title">Data Mahasiswa</h3>
 
                 <div class="card-tools">
-                  <div class="input-group input-group-sm" style="width: 150px;">
-                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-
-                    <div class="input-group-append">
-                      <button type="submit" class="btn btn-default">
-                        <i class="fas fa-search"></i>
-                      </button>
-                    </div>
+                  <a href="tambahmahasiswa.php" class="btn btn-primary">Tambah</a>
                   </div>
                 </div>
               </div>
@@ -70,29 +57,28 @@ while ($baris = mysqli_fetch_assoc($hasil))
                       <th>No</th>
                       <th>NIM</th>
                       <th>Nama</th>
-                      <th>Prodi</th>
-                      <th>Nomor HP</th>
+                      <th>Nama Prodi</th>
+                      <th>No Hp</th>
                       <th>Alamat</th>
                       <th>Foto</th>
                       <th>Aksi</th>
                     </tr>
                   </thead>
                   <tbody>
-                  <?php
-                  $i = 1;
+                    <?php
+                    $i = 1;
                     foreach ($data as $d) {
                     ?>
-
-                    <tr>
+                      <tr>
                       <td><?php echo $i++ ?></td>
                       <td><?php echo $d['NIM'] ?></td>
                       <td><?php echo $d['Nama'] ?></td>
                       <td><?php echo $d['Nama_Prodi'] ?></td>
                       <td><?php echo $d['No_HP'] ?></td>
                       <td><?php echo $d['Alamat'] ?></td>
-                      <td><?php echo $d['Foto'] ?></td>
-                      <td><a href= "" class="btn btn-warning">Edit</a>
-                        <a href="" class="btn btn-danger">Hapus</a>
+                      <td> <img src="dist/img/<?php echo $d['Foto'] ?>" width="100px" height="100px" /> </td>
+                      <td><a href= "editmahasiswa.php?nim=<?php echo $d['NIM'] ?>" class="btn btn-warning">Edit</a>
+                          <a href= "hapusmahasiswa.php?nim=<?php echo $d['NIM'] ?>" class="btn btn-danger">Hapus</a>
                       </td>
                     </tr>
                     <?php
@@ -108,11 +94,6 @@ while ($baris = mysqli_fetch_assoc($hasil))
         </div>
         <!-- /.row -->
         <!-- Main row -->
-        <div class="row">
-              <section class="col-lg-7 connectedSortable">
-
-              </section>
-        </div>
 
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
